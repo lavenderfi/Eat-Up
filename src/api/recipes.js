@@ -1,16 +1,37 @@
 import axios from 'axios';
 
-
 export const fetchRecipes = async (category) => {
-	const res = await axios.get(
-		`https://www.themealdb.com/api/json/v1/1/filter.php?c=${category}`
-	);
-	return res.data;
+  try {
+    const res = await axios.get(
+      'https://tasty.p.rapidapi.com/recipes/list',
+      {params: { from: '0', size: '20', tags: category },
+        headers: {
+          'X-RapidAPI-Key':
+            'a2a156c5b2msh239bce402adb856p13b617jsnb295a5962103',
+          'X-RapidAPI-Host': 'tasty.p.rapidapi.com',
+        },
+      }
+    );
+    return res.data;
+  } catch (err) {
+    console.error(err);
+  }
 };
 
-export const fetchCategories = async () => {
-	const res = await axios.get(
-		`https://www.themealdb.com/api/json/v1/1/list.php?c=list`
-	);
-	return res.data;
-};
+// export async function getCategories() {
+//   try {
+//     let url = 'https://tasty.p.rapidapi.com/tags/list';
+//     const res = await axios.get(url, {
+//       headers: {
+//         'X-RapidAPI-Key': 'a2a156c5b2msh239bce402adb856p13b617jsnb295a5962103',
+//         'X-RapidAPI-Host': 'tasty.p.rapidapi.com',
+//       },
+//     });
+//     console.log(res.data);
+// 	return res.data
+//   } catch (err) {
+//     console.error(err);
+//   }
+// }
+
+

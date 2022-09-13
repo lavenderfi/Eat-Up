@@ -1,26 +1,21 @@
 import Dropdown from 'react-bootstrap/Dropdown';
 import Button from 'react-bootstrap/Button';
 import { useState, useEffect } from 'react';
-import { fetchCategories, fetchRecipes } from '../api/recipes';
+import { fetchRecipes } from '../api/recipes';
 import Card from 'react-bootstrap/Card'
 
 const Home = () => {
   let [selected, setSelected] = useState(null);
-  let [categories, setCategories] = useState(null);
-  let [recipes, setRecipes] = useState(null);
-  useEffect(() => {
-    async function fetchData() {
-      let data = await fetchCategories();
-      setCategories(data.meals);
-    }
-    fetchData();
-  }, []);
-  function handleSelect(evt) {
+  let [recipe, setRecipe] = useState(null);
+let [category,setCategory] = useState(null)
+  function handleSelect(evt,key) {
     setSelected(evt);
+    setCategory(key.target.id)
   }
   async function handleSubmit(){
-    let recipes = await fetchRecipes(selected)
-    setRecipes(recipes.meals)
+     let recipes = await fetchRecipes(category)
+     let number = Math.floor(Math.random()*20) + 1
+     setRecipe(recipes.results[number])
   }
   return (
     <div>
@@ -29,27 +24,39 @@ const Home = () => {
           {selected ? selected : 'Category'}
         </Dropdown.Toggle>
         <Dropdown.Menu>
-          {categories &&
-            categories.map((category, i) => {
-              return (
-                <Dropdown.Item eventKey={category.strCategory} key={i}>
-                  {category.strCategory}
-                </Dropdown.Item>
-              );
-            })}
-          <Dropdown.Item>All</Dropdown.Item>
+          <Dropdown.Item eventKey='American' id='american'>American</Dropdown.Item>
+          <Dropdown.Item eventKey='Indian' id='indian'>Indian</Dropdown.Item>
+          <Dropdown.Item eventKey='Vegetarian' id='vegetarian'>Vegetarian</Dropdown.Item>
+          <Dropdown.Item eventKey='Vegan' id='vegan'>Vegan</Dropdown.Item>
+          <Dropdown.Item eventKey='Chinese' id='chinese'>Chinese</Dropdown.Item>
+          <Dropdown.Item eventKey='Korean' id='korean'>Korean</Dropdown.Item>
+          <Dropdown.Item eventKey='cheap' id='cheap'>Cheap</Dropdown.Item>
+          <Dropdown.Item eventKey='Italian' id='italian'>Italian</Dropdown.Item>
+          <Dropdown.Item eventKey='Mexican' id='mexican'>Mexican</Dropdown.Item>
+          <Dropdown.Item eventKey='Quick' id='under_30_minutes'>Quick</Dropdown.Item>
         </Dropdown.Menu>
       </Dropdown>
       <Button onClick={handleSubmit}>Find me a recipe!</Button>
-{recipes && recipes.map(recipe => {
-  return (
-    <Card style={{width:'18rem'}}>
-      {recipe.strMeal}
-      <img src={recipe.strMealThumb} />
-    </Card>
-  )
-})}
+      {recipe && 
+      <Card style={{width:'18rem'}}>
+        <Card.Title>{recipe.name}</Card.Title>
+        <img src={recipe.thumbnail_url} alt={recipe.name}/>
+        <Card.Body>
+          {recipe.yields}
+          {recipe.prep_time_minutes}
+          {recipe.instructions.map(step =>{
+            return (
+              <div key={step.position}>
+                {step.position}:
+                {step.display_text}
+              </div>
+            )
+          })}
+        </Card.Body>
+        </Card>
+        }
     </div>
+
   );
 };
 

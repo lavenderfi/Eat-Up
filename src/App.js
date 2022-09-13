@@ -5,7 +5,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 function App() {
   return (
     <div className="App">
-      What do I want for dinner?
+      What should I eat for dinner?
       <Home />
     </div>
   );
