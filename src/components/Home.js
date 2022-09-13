@@ -44,7 +44,7 @@ let [category,setCategory] = useState(null)
         <Card.Body>
           {recipe.yields}
           {recipe.prep_time_minutes}
-          {recipe.instructions.map(step =>{
+          {recipe.instructions&& recipe.instructions.map(step =>{
             return (
               <div key={step.position}>
                 {step.position}:
