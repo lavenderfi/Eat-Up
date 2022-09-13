@@ -30,7 +30,6 @@ let [category,setCategory] = useState(null)
           <Dropdown.Item eventKey='Vegan' id='vegan'>Vegan</Dropdown.Item>
           <Dropdown.Item eventKey='Chinese' id='chinese'>Chinese</Dropdown.Item>
           <Dropdown.Item eventKey='Korean' id='korean'>Korean</Dropdown.Item>
-          <Dropdown.Item eventKey='cheap' id='cheap'>Cheap</Dropdown.Item>
           <Dropdown.Item eventKey='Italian' id='italian'>Italian</Dropdown.Item>
           <Dropdown.Item eventKey='Mexican' id='mexican'>Mexican</Dropdown.Item>
           <Dropdown.Item eventKey='Quick' id='under_30_minutes'>Quick</Dropdown.Item>
@@ -38,7 +37,8 @@ let [category,setCategory] = useState(null)
       </Dropdown>
       <Button onClick={handleSubmit}>Find me a recipe!</Button>
       {recipe && 
-      <Card style={{width:'18rem'}}>
+     
+      <Card style={{width:'18rem'}}> {console.log(recipe)}
         <Card.Title>{recipe.name}</Card.Title>
         <img src={recipe.thumbnail_url} alt={recipe.name}/>
         <Card.Body>
