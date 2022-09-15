@@ -8,14 +8,29 @@ const Home = () => {
   let [selected, setSelected] = useState(null);
   let [recipe, setRecipe] = useState(null);
 let [category,setCategory] = useState(null)
+let [recipes,setRecipes] = useState(null)
+
   function handleSelect(evt,key) {
     setSelected(evt);
     setCategory(key.target.id)
   }
   async function handleSubmit(){
-     let recipes = await fetchRecipes(category)
-     let number = Math.floor(Math.random()*20) + 1
-     setRecipe(recipes.results[number])
+     let data = await fetchRecipes(category)
+    setRecipes(data.results)
+     let number = Math.floor(Math.random()*20)
+     setRecipe(data.results[number])
+     
+  }
+ 
+  function newRecipe(){
+    if(recipes.length === 0){
+      setRecipe(false)
+    }
+    else {
+      let length = recipes.length - 1
+      let number = Math.floor(Math.random()*length)
+      setRecipe(recipes.splice(number, 1)[0])
+    }
   }
   return (
     <div>
@@ -37,8 +52,8 @@ let [category,setCategory] = useState(null)
       </Dropdown>
       <Button onClick={handleSubmit}>Find me a recipe!</Button>
       {recipe && 
-     
-      <Card style={{width:'18rem'}}> {console.log(recipe)}
+      <div>
+      <Card style={{width:'30rem'}}>
         <Card.Title>{recipe.name}</Card.Title>
         <img src={recipe.thumbnail_url} alt={recipe.name}/>
         <Card.Body>
@@ -47,15 +62,19 @@ let [category,setCategory] = useState(null)
           {recipe.instructions&& recipe.instructions.map(step =>{
             return (
               <div key={step.position}>
-                {step.position}:
+                <h3>{step.position}.</h3>
                 {step.display_text}
               </div>
             )
           })}
+          {recipes.length === 0 && <div>Pick another category!</div>}
         </Card.Body>
         </Card>
+        <Button onClick={newRecipe}>Find another recipe</Button>
+        </div>
         }
-    </div>
+        
+    </div> 
 
   );
 };
